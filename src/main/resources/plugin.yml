@@ -1,0 +1,9 @@
+name: CustomEnchants
+version: '${project.version}'
+main: tokeee.rubixstudio.customenchants.CustomEnchants
+authors: [ Tokeee ]
+description: Custom enchantments
+commands:
+  ce:
+    description: Gives custom enchantment books
+    usage: /ce give
