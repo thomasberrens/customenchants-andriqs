@@ -16,6 +16,7 @@ import tokeee.rubixstudio.customenchants.events.CreateCustomItem;
 import tokeee.rubixstudio.customenchants.events.PlayerGetCustomItem;
 import tokeee.rubixstudio.customenchants.events.PlayerOpensCustomAnvil;
 import tokeee.rubixstudio.customenchants.manager.EventManager;
+import tokeee.rubixstudio.customenchants.utils.ColorUtils;
 import tokeee.rubixstudio.customenchants.utils.EnchantUtils;
 import tokeee.rubixstudio.customenchants.utils.ParticleEffect;
 
@@ -39,7 +40,7 @@ public class CustomAnvil implements Listener {
      * @param player the player
      */
     private void openEnchantmentInventory(Player player) {
-        Inventory Inv = Bukkit.createInventory(null, 27, ChatColor.GOLD + anvilName);
+        Inventory Inv = Bukkit.createInventory(null, 27, ColorUtils.format(anvilName));
         for (int i = 0; i < Inv.getSize(); i++) {
             if (i == 10 || i == 12) {
                 ItemStack air = new ItemStack(Material.AIR);
@@ -62,7 +63,7 @@ public class CustomAnvil implements Listener {
      */
     @EventHandler
     private void invClose(InventoryCloseEvent event) {
-        if (event.getView().getTitle().equalsIgnoreCase(ChatColor.GOLD + anvilName)) {
+        if (event.getView().getTitle().equalsIgnoreCase(ColorUtils.format(anvilName))) {
             final Inventory Inv = event.getInventory();
             final Player player = (Player) event.getPlayer();
 
@@ -107,7 +108,7 @@ public class CustomAnvil implements Listener {
      */
     @EventHandler
     private void invDrag(InventoryDragEvent event) {
-        if (event.getView().getTitle().equalsIgnoreCase(ChatColor.GOLD + anvilName)) {
+        if (event.getView().getTitle().equalsIgnoreCase(ColorUtils.format(anvilName))) {
             for (int i : event.getRawSlots()) {
                 if (i != 10 && i != 12 && i < 27) {
                     event.setCancelled(true);
@@ -183,7 +184,7 @@ public class CustomAnvil implements Listener {
      */
     @EventHandler
     public void invClick(InventoryClickEvent event) {
-        if (event.getView().getTitle().equalsIgnoreCase(ChatColor.GOLD + anvilName)) {
+        if (event.getView().getTitle().equalsIgnoreCase(ColorUtils.format(anvilName))) {
             Player player = (Player) event.getWhoClicked();
             InventoryAction action = event.getAction();
             if (event.getClickedInventory() != null) {

@@ -20,32 +20,65 @@ public class GiveCustomItemCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+        if (commandSender.hasPermission("customenchants.admin") || commandSender.isOp()) {
 
-        if (strings.length == 0) return false;
-        if (commandSender.hasPermission("customenchants.admin") && commandSender instanceof Player) {
+            if (strings.length != 4) {
+                commandSender.sendMessage(ChatColor.RED + "Use /ce give Notch Blindness 1 to give someone a custom enchant.");
+                return true;
+            }
+
             if (strings[0].equalsIgnoreCase("give")) {
                 final String targetName = strings[1];
                 final Player player = Bukkit.getPlayer(targetName);
 
+                if (player == null) {
+                    commandSender.sendMessage(ChatColor.RED + targetName + " is not an online player.");
+                    return true;
+                }
+
                 final String enchantName = strings[2].toLowerCase();
-                final int amount = Integer.parseInt(strings[3]);
+                final String number = strings[3];
+                if (!isValidNumber(number)) {
+                    commandSender.sendMessage(ChatColor.RED + number + " is not a number.");
+                    return true;
+                }
+                final int amount = Integer.parseInt(number);
 
                 final char ch = ' ';
                 final String enchantmentName = enchantName.replace('_', ch);
 
+                boolean foundEnchantment = false;
                 for (final Enchantment enchant : CustomEnchants.getInstance().getAllCustomEnchantments()) {
                     if (enchantmentName.equalsIgnoreCase(enchant.getName())) {
                         final ItemStack itemStack = new ItemStack(specialBook(enchant, amount));
                         player.getInventory().addItem(itemStack);
+                        foundEnchantment = true;
                     }
+                }
+
+                if (!foundEnchantment) {
+                    commandSender.sendMessage(ChatColor.RED + "Couldn't find enchantment: " + enchantmentName);
+                } else {
+                    commandSender.sendMessage(ChatColor.GREEN + "Gave enchantmentent: " + enchantmentName);
                 }
                 return true;
             }
 
 
             return true;
+        } else {
+            commandSender.sendMessage(ChatColor.RED + "You do not have permission for this command.");
         }
         return true;
+    }
+
+    private boolean isValidNumber(final String string) {
+        try {
+            int number = Integer.parseInt(string);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
     }
 
     private ItemStack specialBook(final Enchantment ench, int amount){

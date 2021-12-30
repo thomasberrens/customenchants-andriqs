@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import tokeee.rubixstudio.customenchants.anvil.CustomAnvil;
 import tokeee.rubixstudio.customenchants.commands.GiveCustomItemCommand;
+import tokeee.rubixstudio.customenchants.commands.ListCustomEnchants;
 import tokeee.rubixstudio.customenchants.enchantments.BlindnessEnchantment;
 import tokeee.rubixstudio.customenchants.enchantments.BowPoisonEnchantment;
 import tokeee.rubixstudio.customenchants.enchantments.NoFoodEnchantment;
@@ -59,6 +60,7 @@ public class CustomEnchants extends JavaPlugin implements Listener  {
         Bukkit.getPluginManager().registerEvents(blindnessEnchantment, this);
 
         this.getCommand("ce").setExecutor(new GiveCustomItemCommand());
+        this.getCommand("listce").setExecutor(new ListCustomEnchants());
 
     }
 
@@ -79,7 +81,7 @@ public class CustomEnchants extends JavaPlugin implements Listener  {
         config.addDefault("blindness-effect-minimal.chance", 0);
         config.addDefault("blindness-effect-maximal.chance", 30);
 
-        config.addDefault("customanvil.name", "anvilName");
+        config.addDefault("customanvil.name", "&6anvilName");
 
         saveConfig();
     }

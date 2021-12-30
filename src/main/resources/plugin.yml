@@ -6,4 +6,7 @@ description: Custom enchantments
 commands:
   ce:
     description: Gives custom enchantment books
-    usage: /ce give
+    usage: /ce give Notch Blindness 1
+  listce:
+    description: Lists every custom enchant
+    usage: /listce

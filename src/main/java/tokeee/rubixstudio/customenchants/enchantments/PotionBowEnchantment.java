@@ -53,7 +53,6 @@ public abstract class PotionBowEnchantment extends CustomEnchantment implements 
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onShoot(final EntityShootBowEvent event) {
-        Bukkit.broadcastMessage("TEST1");
         if (event.isCancelled()) return;
         if (!(EnchantUtils.hasItemStackEnchantment(event.getBow(), this))) return;
 
