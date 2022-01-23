@@ -7,5 +7,4 @@ public class PotionBowValue {
     public static final List<String> potionBowValues = new ArrayList<>();
 
     public static final String POISON = "poisoned";
-    public static final String WITHER = "wither";
 }

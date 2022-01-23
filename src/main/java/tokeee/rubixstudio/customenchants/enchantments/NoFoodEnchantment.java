@@ -8,6 +8,7 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -16,15 +17,9 @@ import tokeee.rubixstudio.customenchants.utils.EnchantUtils;
 import tokeee.rubixstudio.customenchants.utils.ItemUtils;
 import tokeee.rubixstudio.customenchants.utils.ParticleUtil;
 
-public class NoFoodEnchantment extends CustomEnchantment {
-
-    private @Getter BukkitRunnable noFoodTask;
-
-
+public class NoFoodEnchantment  extends CustomEnchantment implements Listener {
     public NoFoodEnchantment(int id) {
         super(id);
-        this.noFoodTask = noFoodTask();
-        this.noFoodTask.runTaskTimer(CustomEnchants.getInstance(), 0L, 0L);
     }
 
     @Override
@@ -42,25 +37,6 @@ public class NoFoodEnchantment extends CustomEnchantment {
         if(EnchantUtils.hasItemStackEnchantment(player.getInventory().getHelmet(), this)){
             event.setCancelled(true);
         }
-    }
-
-    private BukkitRunnable noFoodTask() {
-        return new BukkitRunnable() {
-            @Override
-            public void run() {
-
-
-                Bukkit.getOnlinePlayers().forEach((p) -> {
-                    if (p == null || !p.isOnline() || p.getInventory().getHelmet() == null || p.getFoodLevel() == 20) return;
-
-                    if (EnchantUtils.hasItemStackEnchantment(p.getInventory().getHelmet(), CustomEnchants.getInstance().getNoFoodEnchantment())){
-                        p.setFoodLevel(20);
-                    }
-
-
-                });
-            }
-        };
     }
 
 

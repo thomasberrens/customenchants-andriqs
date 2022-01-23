@@ -5,15 +5,15 @@ import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import tokeee.rubixstudio.customenchants.anvil.CustomAnvil;
+import tokeee.rubixstudio.customenchants.armoreffects.ArmorEffect;
 import tokeee.rubixstudio.customenchants.commands.GiveCustomItemCommand;
 import tokeee.rubixstudio.customenchants.commands.ListCustomEnchants;
-import tokeee.rubixstudio.customenchants.enchantments.BlindnessEnchantment;
-import tokeee.rubixstudio.customenchants.enchantments.BowPoisonEnchantment;
-import tokeee.rubixstudio.customenchants.enchantments.NoFoodEnchantment;
-import tokeee.rubixstudio.customenchants.enchantments.PotionBowEnchantment;
+import tokeee.rubixstudio.customenchants.enchantments.*;
+import tokeee.rubixstudio.customenchants.manager.ArmorEffectManager;
 import tokeee.rubixstudio.customenchants.manager.EventManager;
 import tokeee.rubixstudio.customenchants.manager.ParticleTrailManager;
 
@@ -26,9 +26,13 @@ public class CustomEnchants extends JavaPlugin implements Listener  {
 
 
     private @Getter ParticleTrailManager particleTrailManager;
+    private @Getter ArmorEffectManager armorEffectManager;
+
     private @Getter PotionBowEnchantment potionBowEnchantment;
     private @Getter NoFoodEnchantment noFoodEnchantment;
     private @Getter BlindnessEnchantment blindnessEnchantment;
+    private @Getter FireResEnchantment fireResEnchantment;
+    private @Getter SpeedEnchantment speedEnchantment;
     private @Getter EventManager eventManager;
     private @Getter CustomAnvil customAnvil;
 
@@ -47,6 +51,7 @@ public class CustomEnchants extends JavaPlugin implements Listener  {
         initializeConfig();
         this.registerEnchantments();
         this.particleTrailManager = new ParticleTrailManager();
+        this.armorEffectManager = new ArmorEffectManager();
         this.eventManager = new EventManager();
 
         this.customAnvil = new CustomAnvil();
@@ -58,6 +63,8 @@ public class CustomEnchants extends JavaPlugin implements Listener  {
         Bukkit.getPluginManager().registerEvents(potionBowEnchantment, this);
         Bukkit.getPluginManager().registerEvents(customAnvil, this);
         Bukkit.getPluginManager().registerEvents(blindnessEnchantment, this);
+        Bukkit.getPluginManager().registerEvents(noFoodEnchantment, this);
+        Bukkit.getPluginManager().registerEvents(armorEffectManager, this);
 
         this.getCommand("ce").setExecutor(new GiveCustomItemCommand());
         this.getCommand("listce").setExecutor(new ListCustomEnchants());
@@ -66,7 +73,18 @@ public class CustomEnchants extends JavaPlugin implements Listener  {
 
     @Override
     public void onDisable(){
-        disable();
+        armorEffectManager.getArmorEffectTask().cancel();
+
+        for (final Map.Entry<Player, List<ArmorEffect>> entry : armorEffectManager.getCurrentPlayersWithArmorEffects().entrySet()) {
+            final Player player = entry.getKey();
+            final List<ArmorEffect> armorEffects = entry.getValue();
+
+            armorEffects.forEach(armorEffect -> {
+                armorEffect.removeEffect(player);
+            });
+        }
+
+        unLoadEnchants();
     }
 
     private void initializeConfig(){
@@ -86,7 +104,7 @@ public class CustomEnchants extends JavaPlugin implements Listener  {
         saveConfig();
     }
 
-    public void disable() {
+    public void unLoadEnchants() {
         // Plugin shutdown logic
         try {
             Field byIdField = Enchantment.class.getDeclaredField("byId");
@@ -115,10 +133,14 @@ public class CustomEnchants extends JavaPlugin implements Listener  {
         potionBowEnchantment = new BowPoisonEnchantment(130);
         noFoodEnchantment = new NoFoodEnchantment(131);
         blindnessEnchantment= new BlindnessEnchantment(132);
+        fireResEnchantment = new FireResEnchantment(133);
+        speedEnchantment = new SpeedEnchantment(134);
         this.allCustomEnchantments = new Enchantment[] {
                 potionBowEnchantment,
                 noFoodEnchantment,
-                blindnessEnchantment
+                blindnessEnchantment,
+                fireResEnchantment,
+                speedEnchantment
 
         };
     }

@@ -90,7 +90,7 @@ public class GiveCustomItemCommand implements CommandExecutor {
         ArrayList<String> lore = new ArrayList<String>();
         lore.add(ChatColor.GRAY + ench.getName() + " I");
         lore.add(ChatColor.GRAY + "Applicable to: " + ChatColor.GOLD + ench.getItemTarget().toString());
-        lore.add(ChatColor.DARK_PURPLE + "Use this book in a anvil!");
+        lore.add(ChatColor.DARK_PURPLE + "Click with this book onn a anvil!");
         meta.setDisplayName(ChatColor.GOLD + ench.getName() + " book");
 
         meta.setLore(lore);

@@ -44,10 +44,7 @@ public class ParticleTrailBuilder {
     public ParticleTrailBuilder withMetadata(String metadata){
         if (metadata.equals(PotionBowValue.POISON)){
             this.setColor(ParticleColor.LIMEGREEN);
-        }else if (metadata.equals(PotionBowValue.WITHER)){
-            this.setColor(ParticleColor.GRAY);
         }
-
         return this;
     }
 
